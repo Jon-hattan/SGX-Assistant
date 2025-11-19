@@ -1,4 +1,4 @@
-# SGX REIT Analysis Assistant (Keppel DC REIT – Pilot)
+# SGX REIT Analysis Assistant (Keppel DC REIT - Pilot)
 
 This project is an end-to-end SGX announcements assistant that automates data collection from [SGX announcements](https://www.sgx.com/securities/company-announcements) and builds a RAG system on top of the documents using Google Gemini’s File Search API. It is currently tested on Keppel DC REIT (2021–2025).
 
