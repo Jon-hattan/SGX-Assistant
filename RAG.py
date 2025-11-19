@@ -3,37 +3,45 @@ from google.genai import types
 import time
 from dotenv import load_dotenv
 import os
+import json
+from pathlib import Path
 
 # Load .env file
-load_dotenv() 
+load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
-# stores = client.file_search_stores.list()
+# Load File Search store ID from tracking file
+UPLOAD_TRACKING_FILE = Path("file_search_uploads.json")
 
-# for store in stores:
-#     print(store.name, store.display_name)
+def load_store_id():
+    """Load the File Search store ID from tracking file."""
+    if not UPLOAD_TRACKING_FILE.exists():
+        print(f"\n❌ Error: Upload tracking file not found: {UPLOAD_TRACKING_FILE}")
+        print("\nPlease run the upload manager first:")
+        print("  python upload_to_file_search.py")
+        return None
 
-# # Create the File Search store with an optional display name
-# file_search_store = client.file_search_stores.create(config={'display_name': 'keppel_dc_reit'})
+    with open(UPLOAD_TRACKING_FILE, 'r', encoding='utf-8') as f:
+        tracking = json.load(f)
 
-# # Upload and import a file into the File Search store, supply a file name which will be visible in citations
-# operation = client.file_search_stores.upload_to_file_search_store(
-#   file='downloads/2025-11-18_Keppel DC REIT - Acquisition Announcement 16 September 2019.pdf',
-#   file_search_store_name=file_search_store.name,
-#   config={
-#       'display_name' : '2025-11-18_Keppel DC REIT - Acquisition Announcement 16 September 2019.pdf',
-#   }
-# )
+    store_id = tracking.get('store_id')
+    if not store_id:
+        print(f"\n❌ Error: No store_id found in {UPLOAD_TRACKING_FILE}")
+        print("\nPlease run the upload manager first:")
+        print("  python upload_to_file_search.py")
+        return None
 
-# # Wait until import is complete
-# while not operation.done:
-#     time.sleep(5)
-#     operation = client.operations.get(operation)
-
+    total_files = len(tracking.get('uploaded_files', []))
+    print(f"Loaded File Search store with {total_files} PDFs")
+    return store_id
 
 # Interactive Q&A with File Search
-file_search_store_name = 'fileSearchStores/sgxkeppeldcreitannouncement-73mjajo0c7d7'
+file_search_store_name = load_store_id()
+
+if not file_search_store_name:
+    print("\nCannot start interactive mode without a File Search store.")
+    exit(1)
 
 print("\n" + "="*70)
 print("File Search RAG - Interactive Mode")
