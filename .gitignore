@@ -1,0 +1,5 @@
+.env
+downloads/
+test_page.html
+test_screenshot.png
+__pycache__/

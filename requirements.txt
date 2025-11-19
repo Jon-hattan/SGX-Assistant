@@ -1,0 +1,9 @@
+# Gemini File Search RAG Pipeline Dependencies
+
+# Gemini API - new SDK with File Search support
+google-genai>=0.2.0
+
+# Already installed for scraper (included for completeness)
+selenium>=4.0.0
+webdriver-manager>=4.0.0
+requests>=2.31.0
