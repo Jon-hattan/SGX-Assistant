@@ -26,9 +26,9 @@ def calculate_file_hash(file_path):
             h.update(chunk)
     return h.hexdigest()
 
-
+# Loads download history from json file, with path: downloads/downloads_history.json
+# returns: python object (dictionary) that contains the info from the json file.
 def load_history():
-    """Load download history from JSON file or create new if doesn't exist."""
     history_file = os.path.join('downloads', 'download_history.json')
     if os.path.exists(history_file):
         try:
@@ -39,8 +39,9 @@ def load_history():
             return {"last_updated": None, "total_downloads": 0, "downloads": []}
     return {"last_updated": None, "total_downloads": 0, "downloads": []}
 
+# takes in history (dictionary) which contains all the download history from the current downloads,
+#   and loads it into the download_history.json file.
 def save_history(history):
-    """Save download history to JSON file."""
     history_file = os.path.join('downloads', 'download_history.json')
     history['last_updated'] = datetime.now().isoformat()
     history['total_downloads'] = len(history['downloads'])
@@ -50,8 +51,9 @@ def save_history(history):
     except IOError as e:
         print(f"Warning: Could not save history: {e}")
 
+# checks if the file is a duplicate (i.e it has alr been downloaded)
+# Checks if file is in download history, or on disk.
 def is_duplicate(pdf_url, filename, history):
-    """Check if file was already downloaded (by URL, filename, or disk check)."""
     # Check if URL already exists in history
     for record in history.get('downloads', []):
         if record.get('pdf_url') == pdf_url:
@@ -66,6 +68,7 @@ def is_duplicate(pdf_url, filename, history):
 
     return False, None
 
+# Add a specific record to history (which is a dictionary)
 def add_to_history(history, pdf_url, filename, announcement_url, announcement_title, date_str, file_size):
     """Add a download record to history."""
     record = {
@@ -79,8 +82,8 @@ def add_to_history(history, pdf_url, filename, announcement_url, announcement_ti
     }
     history['downloads'].append(record)
 
+# Calculate total storage used by all downloads in bytes
 def get_total_storage(history):
-    """Calculate total storage used by all downloads in bytes."""
     return sum(record.get('file_size', 0) for record in history.get('downloads', []))
 
 # Setup downloads folder
@@ -89,13 +92,13 @@ os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 print(f"Downloads folder ready: {DOWNLOAD_FOLDER}")
 
 # Setup browser
-options = Options()
-options.add_argument('--start-maximized')
+options = Options() # create a browser configuration object
+options.add_argument('--start-maximized') # window should start out fully maximised
 
 driver = webdriver.Chrome(
     service=Service(ChromeDriverManager().install()),
     options=options
-)
+) # launch chrome browser with the options i set up above
 
 # Load download history
 history = load_history()
@@ -125,7 +128,7 @@ while not reached_2021:
     print(f"PAGE {page_num}")
     print(f"{'='*60}")
     print(f"Opening: {url}")
-    driver.get(url)
+    driver.get(url) # launch the SGX website
 
     # Wait for page to load
     print("Waiting for announcements table to load...")
@@ -136,6 +139,7 @@ while not reached_2021:
     announcement_links = driver.find_elements(By.CSS_SELECTOR, 'table.widget-filter-listing-content-table tbody tr td a.website-link')
     announcement_urls = []
 
+    # Every relevant link will have corporate-announcements as the signature. just search for that
     for link in announcement_links:
         href = link.get_attribute('href')
         if href and 'corporate-announcements' in href:
@@ -165,7 +169,7 @@ while not reached_2021:
 
         try:
             print(f"[{announcement_index}/{len(announcement_urls)}] Visiting announcement...")
-            driver.get(announcement_url)
+            driver.get(announcement_url) # Go into the announcements page
             time.sleep(5)  # Wait for announcement page to load
 
             # Extract announcement title
@@ -216,9 +220,9 @@ while not reached_2021:
                 else:
                     pdf_url = pdf_href
 
-                # Sanitize filename
+                # Sanitize filename (jic the filename has something stupid like ?)
                 original_filename = pdf_text if pdf_text else pdf_href.split('/')[-1]
-                safe_filename = re.sub(r'[<>:"/\\|?*]', '_', original_filename)
+                safe_filename = re.sub(r'[<>:"/\\|?*]', '_', original_filename) 
 
                 # Create final filename with date prefix
                 final_filename = f"{date_str}_{safe_filename}"
