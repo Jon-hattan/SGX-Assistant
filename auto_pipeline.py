@@ -40,14 +40,16 @@ def main():
     print("2. Upload new PDFs to Gemini File Search")
     print("3. Ready for RAG queries\n")
 
-    user_input = input("Continue? (yes/no): ").strip().lower()
-    if user_input not in ['yes', 'y']:
-        print("Pipeline cancelled.")
-        return
+
+    """Just in case you want to have user input to verify whether to continue."""
+    # user_input = input("Continue? (yes/no): ").strip().lower()
+    # if user_input not in ['yes', 'y']:
+    #     print("Pipeline cancelled.")
+    #     return
 
     # Step 1: Run scraper
     scraper_success = run_command(
-        f"{sys.executable} sgx_scraper_incremental.py",
+        f"{sys.executable} -m sub_actions.sgx_scraper_incremental",
         "SGX Scraper"
     )
 
@@ -58,7 +60,7 @@ def main():
 
     # Step 2: Run upload manager
     upload_success = run_command(
-        f"{sys.executable} upload_to_file_search.py",
+        f"{sys.executable} -m sub_actions.upload_to_file_search",
         "File Search Upload Manager"
     )
 
