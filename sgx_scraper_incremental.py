@@ -1,3 +1,6 @@
+"""Stops when reached a file that is already downloaded. """
+
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options

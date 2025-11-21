@@ -243,6 +243,13 @@ def main():
             # Save tracking after each upload
             save_upload_tracking(tracking)
 
+            # Delete PDF after successful upload and tracking
+            try:
+                pdf_path.unlink()
+                print(f"  🗑️  Deleted local PDF (uploaded to File Search)")
+            except Exception as delete_error:
+                print(f"  ⚠ Warning: Could not delete local file: {delete_error}")
+
             successful_uploads += 1
             total_size_uploaded += file_size
         else:
@@ -254,8 +261,9 @@ def main():
     print("Upload Complete!")
     print("=" * 70)
     print(f"✓ Successfully uploaded: {successful_uploads} PDFs")
+    print(f"🗑️  Local PDFs deleted: {successful_uploads} files (saved {total_size_uploaded / (1024*1024):.2f} MB local storage)")
     if failed_uploads > 0:
-        print(f"❌ Failed uploads: {failed_uploads} PDFs")
+        print(f"❌ Failed uploads: {failed_uploads} PDFs (kept in downloads/ folder)")
 
     total_files_in_store = len(tracking['uploaded_files'])
     total_storage = sum(f.get('file_size', 0) for f in tracking['uploaded_files'])
@@ -265,6 +273,7 @@ def main():
     print(f"  Total storage: {total_storage / (1024*1024):.2f} MB / 1024 MB")
     print(f"  Store ID: {store.name}")
     print(f"\n✓ Tracking saved to: {UPLOAD_TRACKING_FILE}")
+    print("💡 Note: Uploaded PDFs are stored in File Search, local copies removed to save space")
     print("=" * 70 + "\n")
 
 if __name__ == "__main__":
