@@ -10,7 +10,7 @@ from pathlib import Path
 # Configuration
 DOWNLOADS_FOLDER = Path("downloads")
 DOWNLOAD_HISTORY_FILE = DOWNLOADS_FOLDER / "download_history.json"
-UPLOAD_TRACKING_FILE = Path("file_search_uploads.json")
+UPLOAD_TRACKING_FILE = DOWNLOADS_FOLDER / "file_search_uploads.json"
 
 # Your existing File Search store ID
 EXISTING_STORE_ID = "fileSearchStores/sgxkeppeldcreitannouncement-73mjajo0c7d7"

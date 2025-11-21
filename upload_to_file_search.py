@@ -18,7 +18,7 @@ load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 DOWNLOADS_FOLDER = Path("downloads")
 DOWNLOAD_HISTORY_FILE = DOWNLOADS_FOLDER / "download_history.json"
-UPLOAD_TRACKING_FILE = Path("file_search_uploads.json")
+UPLOAD_TRACKING_FILE = DOWNLOADS_FOLDER / "file_search_uploads.json"
 FILE_SEARCH_STORE_NAME = "sgx-keppel-dc-reit-announcements"
 
 # Chunking configuration

@@ -1,3 +1,6 @@
+"""Scrapes the SGX Announcement Site for Filings TILL 2021"""
+"""Doesn't redownload duplicates, does not stop until 2021 is reached or 1GB storage is reached."""
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options

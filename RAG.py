@@ -12,7 +12,8 @@ load_dotenv()
 client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # Load File Search store ID from tracking file
-UPLOAD_TRACKING_FILE = Path("file_search_uploads.json")
+DOWNLOADS_FOLDER = Path("downloads")
+UPLOAD_TRACKING_FILE = DOWNLOADS_FOLDER / "file_search_uploads.json"
 
 def load_store_id():
     """Load the File Search store ID from tracking file."""

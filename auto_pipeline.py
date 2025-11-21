@@ -47,7 +47,7 @@ def main():
 
     # Step 1: Run scraper
     scraper_success = run_command(
-        f"{sys.executable} sgx_scraper.py",
+        f"{sys.executable} sgx_scraper_incremental.py",
         "SGX Scraper"
     )
 
