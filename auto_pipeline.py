@@ -1,6 +1,7 @@
 """
 Automated SGX Scraper → File Search Upload Pipeline
 Runs scraper to download new PDFs, then uploads them to File Search
+WILL BE RUN ON A CRON JOB. (DAILY)
 """
 
 import subprocess
